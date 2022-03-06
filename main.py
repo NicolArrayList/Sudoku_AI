@@ -1,16 +1,29 @@
 from models.Sudoku import Sudoku
 from models.solver import *
 
-def main():
 
+def text_to_grid():
+    f = open("examples/hard_sudoku_example.txt", "r")
+
+    tab = [[0] * 9] * 9
+
+    for i in range(0, 9):
+        line = f.readline()
+        for j in range(0, 9):
+            tab[i][j] = int(line[j])
+
+    return tab
+
+
+def main():
     sudoku = Sudoku()
-    #TODO: Ajouter la création et la gestion du sudoku
+    # TODO: Ajouter la création et la gestion du sudoku
     # ...
 
     if ac3(sudoku):
         if sudoku.solved():
-            #TODO: afficher le sudoku résolu
-
+            # TODO: afficher le sudoku résolu
+            print()
         else:
             assignment = {}
 
@@ -21,15 +34,15 @@ def main():
             assignment = backtracking(assignment, sudoku)
 
             for possibility in sudoku.possibilities:
-                #TODO: vérifier conformité de ce if
+                # TODO: vérifier conformité de ce if
                 if len(possibility) > 1:
                     sudoku.possibilities[possibility] = assignment[possibility]
 
             if assignment:
-                #TODO: afficher le sudoku à cette étape
+                # TODO: afficher le sudoku à cette étape
+                print()
             else:
                 print("There is no solution")
-
 
 
 if __name__ == '__main__':
