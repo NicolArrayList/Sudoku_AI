@@ -1,9 +1,9 @@
-from models.sudoku import Sudoku
 from models.solver import *
+from models.sudokuGenerator import SudokuGenerator
 
 
-def text_to_grid():
-    f = open("examples/tranquille_sudoku_example.txt", "r")
+def text_to_sudoku():
+    f = open("examples/hard_sudoku_example.txt", "r")
 
     tab = []
 
@@ -16,32 +16,37 @@ def text_to_grid():
 
 
 def main():
-    sudoku = Sudoku(text_to_grid())
-    # TODO: Ajouter la création et la gestion du sudoku
-    # ...
+    while True:
+        print("---------------------- MENU ----------------------")
+        print("1 - Résoudre le sudoku contenu dans le fichier txt")
+        print("2 - Résoudre un sudoku généré aléatoirement")
+        print("0 - Quitter")
+        user_input = input("Entrez le numéro correspondant à votre choix : ")
 
-    if ac3(sudoku):
-        if sudoku.is_solved():
-            print(sudoku)
-        else:
-            assignment = {}
-
-            for x in sudoku.squares:
-                if len(sudoku.possibilities[x]) == 1:
-                    assignment[x] = sudoku.possibilities[x][0]
-
-            assignment = backtracking(assignment, sudoku)
-
-            for possibility in sudoku.possibilities:
-                # TODO: vérifier conformité de ce if
-                if len(possibility) > 1:
-                    sudoku.possibilities[possibility] = assignment[possibility]
-
-            if assignment:
-                # TODO: afficher le sudoku à cette étape
+        if user_input:
+            user_input = int(user_input)
+            if user_input == 1:
+                print("\nSudoku de départ (fichier txt) : ")
+                sudoku = Sudoku(text_to_sudoku())
                 print(sudoku)
+
+                solved_sudokou = solve(sudoku)
+                print("Sudoku résolu :")
+                print(solved_sudokou)
+            elif user_input == 2:
+                sudoku = SudokuGenerator().generate_sudoku()
+                print("\nSudoku de départ (généré aléatoirement: ")
+                print(sudoku)
+
+                solved_sudoku = solve(sudoku)
+                print("Sudoku résolu : ")
+                print(solved_sudoku)
+            elif user_input == 0:
+                exit()
             else:
-                print("There is no solution")
+                print("\nErreur d'entrée\n")
+        else:
+            print("\nVeuillez entrer une valeur\n")
 
 
 if __name__ == '__main__':

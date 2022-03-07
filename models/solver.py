@@ -10,14 +10,11 @@ def ac3(sudoku):
         x, y = queue.pop(0)
 
         if remove_inconsistent_values(sudoku, x, y):
-            # TODO: Vérifier l'effet de ce if
             if len(sudoku.possibilities[x]) == 0:
-                print(x)
                 return False
 
             # Check all the neighbors of the cell and then add them to the queue
             for i in sudoku.neighboring_cells[x]:
-                # TODO: vérifier ce if
                 if i != x:
                     queue.append([i, x])
 
@@ -44,7 +41,6 @@ def backtracking(assignment, sudoku):
     var = select_unassigned_variable(assignment, sudoku)
 
     for value in order_possibilities_values(sudoku, var):
-        # TODO: changer nom fonction en isConsistent()
         # If the value is consistent with the assignment we add it
         if sudoku.is_consistent(assignment, var, value):
             assign(var, value, assignment)
@@ -66,12 +62,45 @@ def select_unassigned_variable(assignment, sudoku):
     return min(unassigned_values, key=lambda key: len(sudoku.possibilities[key]))
 
 
-# TODO: changer description fonction
 # Sort the values in order to get those that rules out the fewest possibilities for
 # the neighbor squares first
 def order_possibilities_values(sudoku, var):
     if len(sudoku.possibilities[var]) == 1:
         return sudoku.possibilities[var]
 
-    # TODO: Changer nom fonction conflicts
     return sorted(sudoku.possibilities[var], key=lambda value: sudoku.number_of_conflicts(var, value))
+
+"""
+This function updates the grid used to display the sudoku
+"""
+def update_grid(sudoku):
+    for index, val in enumerate(sudoku.possibilities.values()):
+        sudoku.grid[index] = val[0]
+
+
+def solve(sudoku):
+    if ac3(sudoku):
+        if sudoku.is_solved():
+            update_grid(sudoku)
+            return sudoku
+        else:
+            assignment = {}
+
+            for x in sudoku.squares:
+                if len(sudoku.possibilities[x]) == 1:
+                    assignment[x] = sudoku.possibilities[x][0]
+
+            assignment = backtracking(assignment, sudoku)
+
+            for possibility in sudoku.possibilities:
+                if len(possibility) > 1:
+                    sudoku.possibilities[possibility] = assignment[possibility]
+
+            if assignment:
+                update_grid(sudoku)
+                return sudoku
+            else:
+                print("There is no solution")
+
+    update_grid(sudoku)
+    return sudoku

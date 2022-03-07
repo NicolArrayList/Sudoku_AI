@@ -16,11 +16,7 @@ def unassign(square, assignment):
 class Sudoku:
 
     def __init__(self, grid):
-
-        if grid is None:
-            self.generate_random_grid()
-        else:
-            self.grid = grid
+        self.grid = grid
 
         self.squares = list()
         self.generate_squares()
@@ -34,8 +30,6 @@ class Sudoku:
         self.neighboring_cells = dict()
         self.generate_neighboring_square_for_all()
 
-        self.beurre()
-
     def generate_squares(self):
         for col in cols:
             for row in rows:
@@ -46,7 +40,8 @@ class Sudoku:
         for i, square in enumerate(self.squares):
             # if the passed list as a value of 0 for this square then it can be anything between 1 and 9
             if self.grid[i] == "0":
-                self.possibilities[square] = list(range(1, 10))
+                self.possibilities[square] = list(map(str, range(1, 10)))
+                random.shuffle(self.possibilities[square])
             # else it can only be the passed value
             else:
                 self.possibilities[square] = [self.grid[i]]
@@ -155,11 +150,12 @@ class Sudoku:
         count = 1
 
         # for each cell, print its value
-        for square in self.squares:
+        for val in self.grid:
 
-            value = str(self.possibilities[square])
-
-            output += value + ' '
+            if val != "0":
+                output += val + ' '
+            else:
+                output += "  "
 
             # if we reach the end of the line,
             # make a new line on display
@@ -172,6 +168,3 @@ class Sudoku:
             count += 1
 
         return output
-
-    def beurre(self):
-        pass
