@@ -6,7 +6,7 @@ cols = "ABCDEFGHI"
 
 
 def assign(square, number, assignment):
-    assignment[square] = number
+    assignment[square] = str(number)
 
 
 def unassign(square, assignment):
@@ -33,6 +33,8 @@ class Sudoku:
 
         self.neighboring_cells = dict()
         self.generate_neighboring_square_for_all()
+
+        self.beurre()
 
     def generate_squares(self):
         for col in cols:
@@ -87,7 +89,7 @@ class Sudoku:
                 sub_square_constraints = list()
                 for i in row:
                     for j in col:
-                        sub_square_constraints.append(i + j)
+                        sub_square_constraints.append(j + i)
                 not_so_binary_constraints.append(sub_square_constraints)
 
         # Now we can make those constraints binary
@@ -102,6 +104,7 @@ class Sudoku:
     """
     This method generates the neighboring square for every square
     """
+
     def generate_neighboring_square_for_all(self):
         # for each square
         for square in self.squares:
@@ -114,14 +117,35 @@ class Sudoku:
                     self.neighboring_cells[square].append(c[1])
 
     """
+    """
+
+    def number_of_conflicts(self, cell, value):
+        count = 0
+        for related_c in self.neighboring_cells[cell]:
+            if len(self.possibilities[related_c]) > 1 and value in self.possibilities[related_c]:
+                count += 1
+        return count
+
+    """
     This method indicates whether a square or cell is consistent. 
     That means the passed square can't have any related square with the same value
     """
+
     def is_consistent(self, assignment, passed_square, passed_number):
         # Going through the assignment list
+        passed_number = str(passed_number)
         for square, number in assignment.items():
             # if one assignment as the same value then the solution is not consistent
             if (number == passed_number) and (square in self.neighboring_cells[passed_square]):
+                return False
+        return True
+
+    """
+    """
+
+    def is_solved(self):
+        for v in self.squares:
+            if len(self.possibilities[v]) > 1:
                 return False
         return True
 
@@ -131,23 +155,23 @@ class Sudoku:
         count = 1
 
         # for each cell, print its value
-        for cell in self.squares:
+        for square in self.squares:
 
-            # trick to get the right print in case of an AC3-finished sudoku
-            value = str(self.possibilities[cell])
-            if type(self.possibilities[cell]) == list:
-                value = str(self.possibilities[cell][0])
+            value = str(self.possibilities[square])
 
-            output += "[" + value + "]"
+            output += value + ' '
 
             # if we reach the end of the line,
             # make a new line on display
-            if count >= 9:
-                count = 0
+            if count % 27 == 0 and count != 81:
+                output += "\n---------------------\n"
+            elif count % 9 == 0:
                 output += "\n"
-
+            elif count % 3 == 0:
+                output += "| "
             count += 1
 
         return output
 
-
+    def beurre(self):
+        pass

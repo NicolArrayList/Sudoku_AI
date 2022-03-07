@@ -1,4 +1,4 @@
-from Sudoku import Sudoku
+from models.sudoku import *
 
 
 def ac3(sudoku):
@@ -10,13 +10,14 @@ def ac3(sudoku):
         x, y = queue.pop(0)
 
         if remove_inconsistent_values(sudoku, x, y):
-            #TODO: Vérifier l'effet de ce if
+            # TODO: Vérifier l'effet de ce if
             if len(sudoku.possibilities[x]) == 0:
+                print(x)
                 return False
 
             # Check all the neighbors of the cell and then add them to the queue
             for i in sudoku.neighboring_cells[x]:
-                #TODO: vérifier ce if
+                # TODO: vérifier ce if
                 if i != x:
                     queue.append([i, x])
 
@@ -26,9 +27,8 @@ def ac3(sudoku):
 def remove_inconsistent_values(sudoku, x, y):
     removed = False
 
-    #TODO: Changer nom fonction constraint
     for i in sudoku.possibilities[x]:
-        if not any([sudoku.constraint(i, j) for j in sudoku.possibilities[y]]):
+        if not any([i != j for j in sudoku.possibilities[y]]):
             sudoku.possibilities[x].remove(i)
             removed = True
 
@@ -36,7 +36,6 @@ def remove_inconsistent_values(sudoku, x, y):
 
 
 def backtracking(assignment, sudoku):
-
     # Check if the assignment is complete
     if len(assignment) == len(sudoku.squares):
         return assignment
@@ -45,16 +44,16 @@ def backtracking(assignment, sudoku):
     var = select_unassigned_variable(assignment, sudoku)
 
     for value in order_possibilities_values(sudoku, var):
-        #TODO: changer nom fonction en isConsistent()
+        # TODO: changer nom fonction en isConsistent()
         # If the value is consistent with the assignment we add it
-        if sudoku.consistent(assignment, var, value):
-            sudoku.assign(var, value, assignment)
+        if sudoku.is_consistent(assignment, var, value):
+            assign(var, value, assignment)
             result = backtracking(assignment, sudoku)
 
             if result:
                 return result
 
-            sudoku.unassign(var, assignment)
+            unassign(var, assignment)
 
     return False
 
@@ -67,12 +66,12 @@ def select_unassigned_variable(assignment, sudoku):
     return min(unassigned_values, key=lambda key: len(sudoku.possibilities[key]))
 
 
-#TODO: changer description fonction
+# TODO: changer description fonction
 # Sort the values in order to get those that rules out the fewest possibilities for
 # the neighbor squares first
 def order_possibilities_values(sudoku, var):
     if len(sudoku.possibilities[var]) == 1:
         return sudoku.possibilities[var]
 
-    #TODO: Changer nom fonction conflicts
-    return sorted(sudoku.possibilities[var], key=lambda value: sudoku.conflicts(sudoku, var, value))
+    # TODO: Changer nom fonction conflicts
+    return sorted(sudoku.possibilities[var], key=lambda value: sudoku.number_of_conflicts(var, value))
