@@ -5,14 +5,6 @@ rows = "123456789"
 cols = "ABCDEFGHI"
 
 
-def assign(square, number, assignment):
-    assignment[square] = str(number)
-
-
-def unassign(square, assignment):
-    del assignment[square]
-
-
 class Sudoku:
 
     def __init__(self, grid):

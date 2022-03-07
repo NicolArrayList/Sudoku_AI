@@ -43,13 +43,13 @@ def backtracking(assignment, sudoku):
     for value in order_possibilities_values(sudoku, var):
         # If the value is consistent with the assignment we add it
         if sudoku.is_consistent(assignment, var, value):
-            assign(var, value, assignment)
+            assignment[var] = str(value)
             result = backtracking(assignment, sudoku)
 
             if result:
                 return result
 
-            unassign(var, assignment)
+            del assignment[var]
 
     return False
 
@@ -69,6 +69,7 @@ def order_possibilities_values(sudoku, var):
         return sudoku.possibilities[var]
 
     return sorted(sudoku.possibilities[var], key=lambda value: sudoku.number_of_conflicts(var, value))
+
 
 """
 This function updates the grid used to display the sudoku
