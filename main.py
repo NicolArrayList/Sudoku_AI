@@ -3,6 +3,10 @@ from models.sudokuGenerator import SudokuGenerator
 
 
 def text_to_sudoku():
+    """
+    this method uses a path input to a txt describing the grid.
+    It can be used to generate this txt as a list for the sudoku class.
+    """
     f = open("examples/hard_sudoku_example.txt", "r")
 
     tab = []
@@ -31,11 +35,12 @@ def main():
                 print(sudoku)
 
                 solved_sudokou = solve(sudoku)
-                print("Sudoku résolu :")
-                print(solved_sudokou)
+                if solved_sudokou:
+                    print("Sudoku résolu :")
+                    print(solved_sudokou)
             elif user_input == 2:
                 sudoku = SudokuGenerator().generate_sudoku()
-                print("\nSudoku de départ (généré aléatoirement: ")
+                print("\nSudoku de départ (généré aléatoirement): ")
                 print(sudoku)
 
                 solved_sudoku = solve(sudoku)
