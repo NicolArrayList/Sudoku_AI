@@ -80,12 +80,14 @@ def update_grid(sudoku):
 
 def solve(sudoku):
     if ac3(sudoku):
+        # If the ac3 is enough to solve the sudoku, we display it
         if sudoku.is_solved():
             update_grid(sudoku)
             return sudoku
         else:
             assignment = {}
 
+            # We assign all the correct possibilities
             for x in sudoku.squares:
                 if len(sudoku.possibilities[x]) == 1:
                     assignment[x] = sudoku.possibilities[x][0]

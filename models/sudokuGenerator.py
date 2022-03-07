@@ -10,6 +10,10 @@ class SudokuGenerator:
     def create_solved_sudoku(self):
         self.sudoku = solve(self.sudoku)
 
+    """
+    This function checks if there is only one possibility for each case, if not it returns false
+    """
+
     def check_multiple_solution(self, sudoku):
         for possibilities in sudoku.possibilities.values():
             if len(possibilities) > 1:
@@ -23,7 +27,6 @@ class SudokuGenerator:
         1 solution
         """
         number_of_removed = random.randint(12, 17)
-
 
         solving_test = copy.deepcopy(self.sudoku)
         # Update solving_test grid values
@@ -43,12 +46,18 @@ class SudokuGenerator:
             for index, val in enumerate(solved.possibilities.values()):
                 solved.grid[index] = val
 
+            # If there is only one solution for each case, we can continue the process. If not, it means that
+            # the sudoku has more than 1 solution, so we stop and use the precedent sudoku
             if self.check_multiple_solution(solved):
                 return self.sudoku
             else:
                 self.sudoku = solving_test
 
             number_of_removed -= 1
+
+    """
+    This function is called in main to create the unresolved sudoku
+    """
 
     def generate_sudoku(self):
         self.create_solved_sudoku()
