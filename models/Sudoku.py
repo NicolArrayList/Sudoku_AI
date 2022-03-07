@@ -125,7 +125,29 @@ class Sudoku:
                 return False
         return True
 
-    def print(self):
-        print(list(self.grid))
+    def __str__(self):
+
+        output = ""
+        count = 1
+
+        # for each cell, print its value
+        for cell in self.squares:
+
+            # trick to get the right print in case of an AC3-finished sudoku
+            value = str(self.possibilities[cell])
+            if type(self.possibilities[cell]) == list:
+                value = str(self.possibilities[cell][0])
+
+            output += "[" + value + "]"
+
+            # if we reach the end of the line,
+            # make a new line on display
+            if count >= 9:
+                count = 0
+                output += "\n"
+
+            count += 1
+
+        return output
 
 
