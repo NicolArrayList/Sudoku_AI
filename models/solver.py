@@ -12,7 +12,6 @@ def ac3(sudoku):
         if remove_inconsistent_values(sudoku, x, y):
             # TODO: Vérifier l'effet de ce if
             if len(sudoku.possibilities[x]) == 0:
-                print(x)
                 return False
 
             # Check all the neighbors of the cell and then add them to the queue
