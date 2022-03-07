@@ -5,12 +5,12 @@ from models.solver import *
 def text_to_grid():
     f = open("examples/hard_sudoku_example.txt", "r")
 
-    tab = [[0] * 9] * 9
+    tab = []
 
     for i in range(0, 9):
         line = f.readline()
         for j in range(0, 9):
-            tab[i][j] = int(line[j])
+            tab.append(int(line[j]))
 
     return tab
 
