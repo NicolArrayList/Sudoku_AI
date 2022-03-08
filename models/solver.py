@@ -81,7 +81,7 @@ def update_grid(sudoku):
 
 def solve(sudoku):
     if not ac3(sudoku):
-        print("There is no solution to this specific sudoku...")
+        print("There is no solution to this specific sudoku")
         return False
     else:
         # If the ac3 is enough to solve the sudoku, we display it
@@ -99,7 +99,7 @@ def solve(sudoku):
             assignment = backtracking(assignment, sudoku)
 
             if not assignment:
-                print("An unexpected error occurred sorry...")
+                print("An unexpected error occurred")
 
             for possibility in sudoku.possibilities:
                 if len(possibility) > 1:
